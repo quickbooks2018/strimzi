@@ -16,7 +16,8 @@ kubectl -n kafka apply -f https://raw.githubusercontent.com/strimzi/strimzi-kafk
 apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
-  name: {cluster_name}
+  name: cloudgeeks-eks-dev
+  namespace: kafka
 spec:
   kafka:
     template:
@@ -44,7 +45,7 @@ spec:
                     - key: kafka.strimzi.io/cluster
                       operator: In 
                       values:
-                        - {cluster_name}
+                        - cloudgeeks-eks-dev
                 topologyKey: "kubernetes.io/hostname"
           nodeAffinity:
             requiredDuringSchedullingIgnoreDuringExecution:
@@ -53,10 +54,15 @@ spec:
                   - key: eks.amazonaws.com/nodegroup
                     Operator: In 
                     values:
-                    - {eks_node_group}
+                    - cloudgeeks-eks-workers
             
-    version: 3.3.1
+
     replicas: 3
+    version: 3.3.1
+    logging:
+      type: inline
+      loggers:
+        kafka.root.logger.level: "INFO"
     listeners:
       - name: external
         port: 9094
@@ -104,7 +110,7 @@ spec:
                     - key: kafka.strimzi.io/cluster
                       operator: In 
                       values:
-                        - {cluster_name}
+                        - cloudgeeks-eks-dev
                 topologyKey: "kubernetes.io/hostname"
           nodeAffinity:
             requiredDuringSchedullingIgnoreDuringExecution:
@@ -113,7 +119,7 @@ spec:
                   - key: eks.amazonaws.com/nodegroup
                     Operator: In 
                     values:
-                    - {eks_node_group}
+                    - cloudgeeks-eks-workers
 
     replicas: 3
     storage:
@@ -146,7 +152,7 @@ spec:
   logging:
     type: inline 
     loggers:
-      root.looger.level: "INFO"
+      zookeeper.root.logger: "INFO"
   template:
     pod:
       securityContext:
@@ -159,6 +165,3 @@ spec:
     livenessProbe:
       initialDelaySeconds: 150
       timeoutSeconds: 10
-
-
-
