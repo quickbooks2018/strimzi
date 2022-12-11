@@ -2,6 +2,7 @@
 # https://strimzi.io/docs/operators/in-development/full/deploying.html
 # https://www.tabnine.com/code/java/methods/com.linkedin.kafka.cruisecontrol.analyzer.GoalOptimizer/%3Cinit%3E
 # https://github.com/strimzi/strimzi-kafka-operator/blob/main/install/cluster-operator/060-Deployment-strimzi-cluster-operator.yaml
+# https://strimzi.io/blog/2019/05/13/accessing-kafka-part-4/
 # https://strimzi.io/quickstarts/
 
 
