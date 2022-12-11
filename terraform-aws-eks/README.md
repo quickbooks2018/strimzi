@@ -49,6 +49,11 @@ mkdir /root/.kube && touch /root/.kube/config
 fi
 ```
 
+- aws eks KubeConfig
+```eksconfig
+aws eks update-kubeconfig --name cloudgeeks-eks-dev --region us-east-1
+```
+
 ##### Source
 
 ```console
