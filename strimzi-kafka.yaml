@@ -11,6 +11,8 @@
 
 # https://github.com/strimzi/strimzi-kafka-operator/tree/main/install/cluster-operator
 
+# git clone https://github.com/strimzi/strimzi-kafka-operator.git
+
 
 
 ---
