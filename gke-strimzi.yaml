@@ -1,0 +1,162 @@
+# https://strimzi.io/docs/operators/latest/configuring.html
+# https://strimzi.io/docs/operators/in-development/full/deploying.html
+# https://www.tabnine.com/code/java/methods/com.linkedin.kafka.cruisecontrol.analyzer.GoalOptimizer/%3Cinit%3E
+# https://github.com/strimzi/strimzi-kafka-operator/blob/main/install/cluster-operator/060-Deployment-strimzi-cluster-operator.yaml
+# https://strimzi.io/blog/2019/05/13/accessing-kafka-part-4/
+# https://strimzi.io/quickstarts/
+
+
+# Prerequisites
+# Kubernetes cluster
+
+# A running Cluster Operator
+
+# 1 git clone https://github.com/strimzi/strimzi-kafka-operator.git || kubectl create namespace kafka;kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
+
+# 2 do cd install/cluster-operator ---> https://github.com/strimzi/strimzi-kafka-operator/tree/main/install/cluster-operator
+
+# https://strimzi.io/docs/operators/latest/deploying.html#deploying-cluster-operator-str
+# Note: mentioned below kafka is the name of the namespace
+
+# 3 replace ---> sed -i 's/namespace: .*/namespace: kafka/' *RoleBinding*.yaml
+
+# kubectl -n kafka apply -f .
+
+
+
+# kubectl create namespace kafka;kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: cloudgeeks-gke
+  namespace: kafka
+spec:
+  kafka:
+    template:
+      externalBootstrapService:
+        metadata:
+          annotations:
+            # Internally exposed
+            cloud.google.com/load-balancer-type: "Internal"
+      perPodService:
+        metadata:
+          annotations:
+            # Internally exposed
+            cloud.google.com/load-balancer-type: "Internal"
+      pod:
+        # Affinity Strategies
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: strimzi.io/cluster
+                      operator: In 
+                      values:
+                        - cloudgeeks-gke
+                topologyKey: "kubernetes.io/hostname"
+          
+            
+
+    replicas: 3
+    version: 3.3.1
+    logging:
+      type: inline
+      loggers:
+        kafka.root.logger.level: "INFO"
+    listeners:
+      - name: external
+        port: 9094
+        type: loadbalancer 
+        tls: true
+    # Tls Authentication
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+        authentication:
+          type: tls
+    # Used with Tls Authentication      
+    authorization:
+      type: simple 
+      superUsers:
+        - ON=autorize-tls-user
+        - authorize-tl-user
+
+     
+    rack:
+      topologyKey: topology.kubernetes.io/zone
+    storage:
+      type: jbod
+      volumes:
+      - id: 0
+        type: persistent-claim
+        size: 10Gi
+        deleteClaim: false
+    config:
+      offsets.topic.replication.factor: 2
+      transaction.state.log.replication.factor: 2
+      transaction.state.log.min.isr: 2
+
+  zookeeper:
+    template:
+      pod:
+        # Affinity Strategies
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: strimzi.io/cluster
+                      operator: In 
+                      values:
+                        - cloudgeeks-gke
+                topologyKey: "kubernetes.io/hostname"
+          
+
+    replicas: 3
+    storage:
+      type: persistent-claim
+      size: 10Gi
+      deleteClaim: false
+  # Strimzi Operators    
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+  cruiseControl:
+    brokerCapacity:
+      disk: 1Gi 
+      cpuUtilization: 80
+      inboundNetwork: 1000KB/s
+      outboundNetwork: 1000KB/s
+    config:
+      hard:goals: >
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuCapacityGoal
+    resources:
+      requests:
+        cpu: 1
+        memory: 2Gi
+      limits:
+        cpu: 2
+        memory: 4Gi
+    logging:
+      type: inline 
+      loggers:
+        zookeeper.root.logger: "INFO"
+    template:
+      pod:
+        securityContext:
+          runAsUser: 1000001
+          fsGroup: 0
+        terminationGracePeriodSeconds: 120
+    readinessProbe:
+      initialDelaySeconds: 150
+      timeoutSeconds: 10
+    livenessProbe:
+      initialDelaySeconds: 150
+      timeoutSeconds: 10
