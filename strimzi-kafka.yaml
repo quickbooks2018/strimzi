@@ -3,6 +3,12 @@
 # https://www.tabnine.com/code/java/methods/com.linkedin.kafka.cruisecontrol.analyzer.GoalOptimizer/%3Cinit%3E
 
 
+# Prerequisites
+# Kubernetes cluster
+
+# A running Cluster Operator
+
+
 ---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
