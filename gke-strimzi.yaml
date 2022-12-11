@@ -61,7 +61,7 @@ spec:
           
             
 
-    replicas: 3
+    replicas: 1
     version: 3.3.1
     logging:
       type: inline
@@ -117,7 +117,7 @@ spec:
                 topologyKey: "kubernetes.io/hostname"
           
 
-    replicas: 3
+    replicas: 1
     storage:
       type: persistent-claim
       size: 10Gi
