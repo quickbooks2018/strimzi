@@ -16,6 +16,9 @@
 # git clone https://github.com/strimzi/strimzi-kafka-operator.git
 
 
+# https://github.com/strimzi/strimzi-kafka-operator/blob/main/install/cluster-operator/060-Deployment-strimzi-cluster-operator.yaml
+
+
 
 ---
 apiVersion: kafka.strimzi.io/v1beta2
