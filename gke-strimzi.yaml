@@ -4,6 +4,7 @@
 # https://github.com/strimzi/strimzi-kafka-operator/blob/main/install/cluster-operator/060-Deployment-strimzi-cluster-operator.yaml
 # https://strimzi.io/blog/2019/05/13/accessing-kafka-part-4/
 # https://strimzi.io/quickstarts/
+# https://strimzi.io/blog/2018/07/30/running-kafka-on-dedicated-nodes/
 
 
 # Prerequisites
