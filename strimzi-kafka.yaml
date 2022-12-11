@@ -9,15 +9,11 @@
 
 # A running Cluster Operator
 
-# https://github.com/strimzi/strimzi-kafka-operator/tree/main/install/cluster-operator
-
-# https://github.com/strimzi/strimzi-kafka-operator/tree/main/cluster-operator/src/main/resources/cluster-roles
-
 # git clone https://github.com/strimzi/strimzi-kafka-operator.git
 
+# https://github.com/strimzi/strimzi-kafka-operator/tree/main/install/cluster-operator
 
-# https://github.com/strimzi/strimzi-kafka-operator/blob/main/install/cluster-operator/060-Deployment-strimzi-cluster-operator.yaml
-
+kubectl -n kafka apply -f .
 
 
 ---
