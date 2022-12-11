@@ -24,7 +24,7 @@
 # kubectl -n kafka apply -f .
 
 
-
+# A running Cluster Operator for this, CRDs are required, simply use below command
 # kubectl create namespace kafka;kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
 
 ---
