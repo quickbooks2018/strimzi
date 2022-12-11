@@ -1,5 +1,7 @@
-# https://strimzi.io/docs/0.12.2/full.html#assembly-resource-limits-and-requests-deployment-configuration-kafka-connect
+# https://strimzi.io/docs/operators/latest/configuring.html
 # https://www.tabnine.com/code/java/methods/com.linkedin.kafka.cruisecontrol.analyzer.GoalOptimizer/%3Cinit%3E
+
+---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
@@ -42,7 +44,7 @@ spec:
                     values:
                     - {eks_node_group}
             
-    version: 3.1.2
+    version: 3.3.1
     replicas: 3
     listeners:
       - name: external
