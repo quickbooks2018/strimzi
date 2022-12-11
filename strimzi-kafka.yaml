@@ -1,0 +1,151 @@
+# https://strimzi.io/docs/0.12.2/full.html#assembly-resource-limits-and-requests-deployment-configuration-kafka-connect
+# https://www.tabnine.com/code/java/methods/com.linkedin.kafka.cruisecontrol.analyzer.GoalOptimizer/%3Cinit%3E
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: {cluster_name}
+spec:
+  kafka:
+    template:
+      externalBootstrapservices:
+        metadata:
+          annotations:
+            # NLB Support
+            service.beta.kubernetes.io/aws-load-balancer-type: nlb
+            # Internall exposed
+            service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0
+      perPodService:
+        metadata:
+          annotations:
+            # NLB Support
+            service.beta.kubernetes.io/aws-load-balancer-type: nlb
+             # Internall exposed
+            service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0
+      pod:
+        # Affinity Strategies
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedullingIgnoreDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: kafka.strimzi.io/cluster
+                      operator: In 
+                      values:
+                        - {cluster_name}
+                topologyKey: "kubernetes.io/hostname"
+          nodeAffinity:
+            requiredDuringSchedullingIgnoreDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: eks.amazonaws.com/nodegroup
+                    Operator: In 
+                    values:
+                    - {eks_node_group}
+            
+    version: 3.1.2
+    replicas: 3
+    listeners:
+      - name: external
+        port: 9094
+        type: loadbalancer 
+        tls: true
+    # Tls Authentication
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+        authentication:
+          type: tls
+    # Used with Tls Authentication      
+    authorization:
+      type: simple 
+      superUsers:
+        - ON=autorize-tls-user
+        - authorize-tl-user
+
+     
+    rack:
+      topologyKey: topology.kubernetes.io/zone
+    storage:
+      type: jbod
+      volumes:
+      - id: 0
+        type: persistent-claim
+        size: 10Gi
+        deleteClaim: false
+    config:
+      offsets.topic.replication.factor: 2
+      transaction.state.log.replication.factor: 2
+      transaction.state.log.min.isr: 2
+      log.message.format.version: "2.6"
+
+  zookeeper:
+    template:
+      pod:
+        # Affinity Strategies
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedullingIgnoreDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: kafka.strimzi.io/cluster
+                      operator: In 
+                      values:
+                        - {cluster_name}
+                topologyKey: "kubernetes.io/hostname"
+          nodeAffinity:
+            requiredDuringSchedullingIgnoreDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: eks.amazonaws.com/nodegroup
+                    Operator: In 
+                    values:
+                    - {eks_node_group}
+
+    replicas: 3
+    storage:
+      type: persistent-claim
+      size: 10Gi
+      deleteClaim: false
+  # Strimzi Operators    
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+  cruiseControl:
+    brokerCapacity:
+      disk: 1Gi 
+      cpuUtilization: 80
+      inboundNetwork: 1000KB/s
+      outboundNetwork: 1000KB/s
+    config:
+      hard:goals: >
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuCapacityGoal
+    resources:
+      requests:
+        cpu: 1
+        memory: 2Gi
+      limits:
+        cpu: 2
+        memory: 4Gi
+  logging:
+    type: inline 
+    loggers:
+      root.looger.level: "INFO"
+  template:
+    pod:
+      securityContext:
+        runAsUser: 1000001
+        fsGroup: 0
+      terminationGracePeriodSeconds: 120
+    readinessProbe:
+      initialDelaySeconds: 150
+      timeoutSeconds: 10
+    livenessProbe:
+      initialDelaySeconds: 150
+      timeoutSeconds: 10
+
+
+
