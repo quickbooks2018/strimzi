@@ -9,11 +9,18 @@
 
 # A running Cluster Operator
 
-# git clone https://github.com/strimzi/strimzi-kafka-operator.git
+# 1 git clone https://github.com/strimzi/strimzi-kafka-operator.git
 
-# https://github.com/strimzi/strimzi-kafka-operator/tree/main/install/cluster-operator
+# 2 do cd install/cluster-operator ---> https://github.com/strimzi/strimzi-kafka-operator/tree/main/install/cluster-operator
 
-kubectl -n kafka apply -f .
+# https://strimzi.io/docs/operators/latest/deploying.html#deploying-cluster-operator-str
+# Note: mentioned below kafka is the name of the namespace
+
+# 3 replace ---> sed -i 's/namespace: .*/namespace: kafka/' *RoleBinding*.yaml
+
+# kubectl -n kafka apply -f .
+
+
 
 
 ---
