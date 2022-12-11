@@ -25,7 +25,7 @@ metadata:
 spec:
   kafka:
     template:
-      externalBootstrapservices:
+      externalBootstrapService:
         metadata:
           annotations:
             # NLB Support
@@ -43,7 +43,7 @@ spec:
         # Affinity Strategies
         affinity:
           podAntiAffinity:
-            requiredDuringSchedullingIgnoreDuringExecution:
+            requiredDuringSchedulingIgnoredDuringExecution:
               - labelSelector:
                   matchExpressions:
                     - key: kafka.strimzi.io/cluster
@@ -52,7 +52,7 @@ spec:
                         - cloudgeeks-eks-dev
                 topologyKey: "kubernetes.io/hostname"
           nodeAffinity:
-            requiredDuringSchedullingIgnoreDuringExecution:
+            requiredDuringSchedulingIgnoredDuringExecution:
               nodeSelectorTerms:
                 - matchExpressions:
                   - key: eks.amazonaws.com/nodegroup
@@ -108,7 +108,7 @@ spec:
         # Affinity Strategies
         affinity:
           podAntiAffinity:
-            requiredDuringSchedullingIgnoreDuringExecution:
+            requiredDuringSchedulingIgnoredDuringExecution:
               - labelSelector:
                   matchExpressions:
                     - key: kafka.strimzi.io/cluster
@@ -117,7 +117,7 @@ spec:
                         - cloudgeeks-eks-dev
                 topologyKey: "kubernetes.io/hostname"
           nodeAffinity:
-            requiredDuringSchedullingIgnoreDuringExecution:
+            requiredDuringSchedulingIgnoredDuringExecution:
               nodeSelectorTerms:
                 - matchExpressions:
                   - key: eks.amazonaws.com/nodegroup
