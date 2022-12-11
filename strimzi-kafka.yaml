@@ -21,7 +21,7 @@ apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
   name: cloudgeeks-eks-dev
-  namespace: default
+  namespace: kafka
 spec:
   kafka:
     template:
