@@ -21,7 +21,7 @@ apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
   name: cloudgeeks-eks-dev
-  namespace: kafka
+  namespace: default
 spec:
   kafka:
     template:
@@ -46,7 +46,7 @@ spec:
             requiredDuringSchedulingIgnoredDuringExecution:
               - labelSelector:
                   matchExpressions:
-                    - key: kafka.strimzi.io/cluster
+                    - key: strimzi.io/cluster
                       operator: In 
                       values:
                         - cloudgeeks-eks-dev
@@ -56,7 +56,7 @@ spec:
               nodeSelectorTerms:
                 - matchExpressions:
                   - key: eks.amazonaws.com/nodegroup
-                    Operator: In 
+                    operator: In 
                     values:
                     - cloudgeeks-eks-workers
             
@@ -111,7 +111,7 @@ spec:
             requiredDuringSchedulingIgnoredDuringExecution:
               - labelSelector:
                   matchExpressions:
-                    - key: kafka.strimzi.io/cluster
+                    - key: strimzi.io/cluster
                       operator: In 
                       values:
                         - cloudgeeks-eks-dev
@@ -121,7 +121,7 @@ spec:
               nodeSelectorTerms:
                 - matchExpressions:
                   - key: eks.amazonaws.com/nodegroup
-                    Operator: In 
+                    operator: In 
                     values:
                     - cloudgeeks-eks-workers
 
@@ -153,16 +153,16 @@ spec:
       limits:
         cpu: 2
         memory: 4Gi
-  logging:
-    type: inline 
-    loggers:
-      zookeeper.root.logger: "INFO"
-  template:
-    pod:
-      securityContext:
-        runAsUser: 1000001
-        fsGroup: 0
-      terminationGracePeriodSeconds: 120
+    logging:
+      type: inline 
+      loggers:
+        zookeeper.root.logger: "INFO"
+    template:
+      pod:
+        securityContext:
+          runAsUser: 1000001
+          fsGroup: 0
+        terminationGracePeriodSeconds: 120
     readinessProbe:
       initialDelaySeconds: 150
       timeoutSeconds: 10
