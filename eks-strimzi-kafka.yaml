@@ -109,7 +109,6 @@ spec:
       offsets.topic.replication.factor: 2
       transaction.state.log.replication.factor: 2
       transaction.state.log.min.isr: 2
-      log.message.format.version: "2.6"
 
   zookeeper:
     template:
