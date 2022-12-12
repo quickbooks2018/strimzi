@@ -33,4 +33,4 @@ or
 
 ssh -N -L 9092:0.0.0.0:9092 cloud_user@13.57.221.213
 
-curl -v telnet://localhost:9095
+curl -v telnet://localhost:9092
