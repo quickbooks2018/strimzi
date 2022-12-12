@@ -13,4 +13,8 @@ kubectl -n kafka expose service my-cluster-kafka-bootstrap --name kafka-bootstra
 # k expose --type=NodePort deployment nginx --port 80 --name nginx-ep-patch  --overrides '{ "apiVersion": "v1","spec":{"ports": [{"port":80,"protocol":"TCP","targetPort":80,"nodePort":30080}]}}'
 service/nginx-ep-patch expose    
     
-    
+###################    
+# kind port forward
+###################
+
+kubectl -n kafka port-forward svc/my-cluster-kafka-bootstrap --address 0.0.0.0 9092:9092
