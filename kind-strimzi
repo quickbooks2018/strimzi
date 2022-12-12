@@ -48,7 +48,7 @@ kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic my-topic --
 ##################################################################################################################################
 kubectl -n kafka expose service my-cluster-kafka-bootstrap --name kafka-bootstrap \
     --type NodePort --protocol TCP --port 9092 --target-port 9092  --overrides '{ "apiVersion": "v1","spec":{"ports": [{"port":9092,"protocol":"TCP","targetPort":9092,"nodePort":30080}]}}'
-                              # container-port      # service-port                                                                                                              # fixed-node-port          
+                              # service-port      # container-port                                                                                                              # fixed-node-port          
     
 # Example https://stackoverflow.com/questions/52522570/how-to-expose-a-kubernetes-service-on-a-specific-nodeport    
 # k expose --type=NodePort deployment nginx --port 80 --name nginx-ep-patch  --overrides '{ "apiVersion": "v1","spec":{"ports": [{"port":80,"protocol":"TCP","targetPort":80,"nodePort":30080}]}}'
