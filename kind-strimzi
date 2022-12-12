@@ -2,6 +2,47 @@ https://strimzi.io/quickstarts/
 
 # https://cloud.google.com/kubernetes-engine/docs/how-to/exposing-apps
 
+
+
+
+#########
+# shell-1 ---> producer
+#########
+kubectl -n kafka exec -it pod/my-cluster-kafka-0 -- bash
+cd bin
+
+./kafka-topics.sh --create --topic my-topic --bootstrap-server localhost:9092 --replication-factor 1 --partitions 3
+
+./kafka-console-producer.sh --broker-list localhost:9092 --topic my-topic
+
+########
+#shell-2 ---> consumer
+########
+kubectl -n kafka exec -it pod/my-cluster-kafka-0 -- bash
+
+cd bin
+
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic my-topic --from-beginning
+
+
+
+
+
+
+#############
+# for Windows
+#############
+kafka-topics.bat --create --topic my-topic --bootstrap-server localhost:9092 --replication-factor 1 --partitions 3
+
+kafka-console-producer.bat --broker-list localhost:9092 --topic my-topic
+
+kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic my-topic --from-beginning
+
+
+
+
+
+
 ##################################################################################################################################
 # Note: In kind cluster expose will not work because cluster itself, already running in a container always do port-forward in kind
 ##################################################################################################################################
