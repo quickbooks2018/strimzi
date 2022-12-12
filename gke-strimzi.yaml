@@ -70,7 +70,7 @@ spec:
     listeners:
       - name: external
         port: 9094
-        type: internal # loadbalancer 
+        type: loadbalancer 
         tls: true
     # Tls Authentication
       - name: tls
