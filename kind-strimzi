@@ -18,3 +18,19 @@ service/nginx-ep-patch expose
 ###################
 
 kubectl -n kafka port-forward svc/my-cluster-kafka-bootstrap --address 0.0.0.0 9092:9092
+
+############
+# SSH Tunnel
+############
+
+# https://www.ssh.com/ssh/tunneling/example
+# https://docs.bitnami.com/virtual-machine/faq/get-started/access-ssh-tunnel/
+ssh -i ubuntu.pem -N -L 8888:127.0.0.1:80 ubuntu@IP
+
+localhost:8888
+
+or 
+
+ssh -N -L 9092:0.0.0.0:9092 cloud_user@13.57.221.213
+
+curl -v telnet://localhost:9095
