@@ -21,3 +21,6 @@ cd bin
 # https://stackoverflow.com/questions/41964676/kafka-connect-running-out-of-heap-space
 
 export KAFKA_HEAP_OPTS="-Xms512m -Xmx1g"
+
+
+# https://www.youtube.com/watch?v=nQ97J0yL5W4
