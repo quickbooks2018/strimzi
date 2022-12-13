@@ -16,3 +16,8 @@ kubectl -n kafka exec -it pod/my-cluster-kafka-0 -- bash
 cd bin
 
 ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic my-topic --from-beginning
+
+
+# https://stackoverflow.com/questions/41964676/kafka-connect-running-out-of-heap-space
+
+export KAFKA_HEAP_OPTS="-Xms512m -Xmx1g"
