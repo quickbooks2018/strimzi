@@ -44,7 +44,7 @@ spec:
           annotations:
             # NLB Support
             service.beta.kubernetes.io/aws-load-balancer-type: nlb
-            # Internall exposed
+            # Internally exposed
             service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0
       perPodService:
         metadata:
