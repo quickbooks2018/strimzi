@@ -1,0 +1,122 @@
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: cloudgeeks-eks-dev
+  namespace: kafka
+spec:
+  kafka:
+    template:
+      externalBootstrapService:
+        metadata:
+          annotations:
+            # NLB Support
+           service.beta.kubernetes.io/aws-load-balancer-type: nlb
+           service.beta.kubernetes.io/aws-load-balancer-internal: true
+      perPodService:
+        metadata:
+          annotations:
+            # NLB Support
+            service.beta.kubernetes.io/aws-load-balancer-type: nlb
+            service.beta.kubernetes.io/aws-load-balancer-internal: true
+      pod:
+        # Affinity Strategies
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: strimzi.io/cluster
+                      operator: In
+                      values:
+                        - cloudgeeks-eks-dev
+                topologyKey: "kubernetes.io/hostname"
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: eks.amazonaws.com/nodegroup
+                    operator: In
+                    values:
+                    - cloudgeeks-eks-workers
+
+
+    replicas: 2
+    version: 3.3.1
+    logging:
+      type: inline
+      loggers:
+        kafka.root.logger.level: "INFO"
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+      - name: external
+        port: 9094
+        type: loadbalancer
+        tls: false
+
+
+    rack:
+      topologyKey: topology.kubernetes.io/zone
+    storage:
+      type: jbod
+      volumes:
+      - id: 0
+        type: persistent-claim
+        size: 10Gi
+        deleteClaim: false
+    config:
+      offsets.topic.replication.factor: 2
+      transaction.state.log.replication.factor: 2
+      transaction.state.log.min.isr: 2
+
+  zookeeper:
+    template:
+      pod:
+        # Affinity Strategies
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: strimzi.io/cluster
+                      operator: In
+                      values:
+                        - cloudgeeks-eks-dev
+                topologyKey: "kubernetes.io/hostname"
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: eks.amazonaws.com/nodegroup
+                    operator: In
+                    values:
+                    - cloudgeeks-eks-workers
+
+    replicas: 2
+    storage:
+      type: persistent-claim
+      size: 10Gi
+      deleteClaim: false
+    resources:
+      requests:
+        cpu: 1
+        memory: 2Gi
+      limits:
+        cpu: 2
+        memory: 4Gi
+    logging:
+      type: inline
+      loggers:
+        zookeeper.root.logger: "INFO"
+
+  # Strimzi Operators
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
