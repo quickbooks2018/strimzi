@@ -24,6 +24,7 @@
 
 # kubectl -n kafka apply -f .
 
+# kubectl get kafka -n kafka ---> (must be in ready state)
 
 # A running Cluster Operator for this, CRDs are required, simply use below command for CRD + Installation of Strimzi Cluster Operaor
 
