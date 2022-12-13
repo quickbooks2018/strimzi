@@ -80,7 +80,7 @@ spec:
       - name: tls
         port: 9093
         type: internal
-        tls: true   
+        tls: true
       - name: external
         port: 9094
         type: loadbalancer
@@ -123,28 +123,17 @@ spec:
       size: 10Gi
       deleteClaim: false
     resources:
-          requests:
-            cpu: 1
-            memory: 2Gi
-          limits:
-            cpu: 2
-            memory: 4Gi
-        logging:
-          type: inline
-          loggers:
-            zookeeper.root.logger: "INFO"
-        template:
-          pod:
-            securityContext:
-              runAsUser: 1000001
-              fsGroup: 0
-            terminationGracePeriodSeconds: 120
-        readinessProbe:
-          initialDelaySeconds: 150
-          timeoutSeconds: 10
-        livenessProbe:
-          initialDelaySeconds: 150
-          timeoutSeconds: 10
+      requests:
+        cpu: 1
+        memory: 2Gi
+      limits:
+        cpu: 2
+        memory: 4Gi
+    logging:
+      type: inline
+      loggers:
+        zookeeper.root.logger: "INFO"
+
   # Strimzi Operators
   entityOperator:
     topicOperator: {}
