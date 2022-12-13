@@ -123,17 +123,17 @@ spec:
       size: 10Gi
       deleteClaim: false
     resources:
-          requests:
-            cpu: 1
-            memory: 2Gi
-          limits:
-            cpu: 2
-            memory: 4Gi
-        logging:
-          type: inline
-          loggers:
-            zookeeper.root.logger: "INFO"
-        
+      requests:
+        cpu: 1
+        memory: 2Gi
+      limits:
+        cpu: 2
+        memory: 4Gi
+    logging:
+      type: inline
+      loggers:
+        zookeeper.root.logger: "INFO"
+
   # Strimzi Operators
   entityOperator:
     topicOperator: {}
