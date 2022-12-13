@@ -1,0 +1,35 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaBridge
+metadata:
+  name: cloudgeeks-ca-bridge
+  namespace: kafka
+spec:
+  replicas: 3
+  bootstrapServers: cloudgeeks-ca-kafka-kafka-bootstrap:9092
+  http:
+    port: 8080
+
+
+# ---> Simply access the POD directly ---> Setup via Deployment
+################################################################################################
+# kubectl expose deployment cloudgeeks-ca-bridge-bridge --type=NodePort  --protocol TCP --port 80 --target-port 8080 --overrides='{ "apiVersion": "v1", "metadata": {"annotations": { "service.beta.kubernetes.io/aws-load-balancer-type":"nlb-ip" } } }' --name=cloudgeeks-ca-bridge-exposed  -n kafka
+###############################################################################################
+
+
+
+
+# https://github.com/kubernetes/kubectl/issues/826    
+
+# https://docs.aws.amazon.com/eks/latest/userguide/load-balancing.html
+
+# https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/    
+
+# https://cloud.google.com/kubernetes-engine/docs/how-to/exposing-apps
+
+# kubectl.exe expose deployment cloudgeeks-ca-bridge-bridge --type=NodePort --name=cloudgeeks-ca-bridge-bridge-service-cloudgeeks-ca -n kafka
+
+# kubectl expose deployment cloudgeeks-ca-bridge-bridge --type=NodePort  --protocol TCP --port 80 --target-port 8080 --overrides='{ "apiVersion": "v1", "metadata": {"annotations": { "service.beta.kubernetes.io/aws-load-balancer-type":"nlb-ip" } } }' --name=cloudgeeks-ca-bridge-nlb  -n kafka
+
+# "metadata": {"annotations": { "service.beta.kubernetes.io/aws-load-balancer-type":"nlb-ip" } }
+
+# --overrides='{ "apiVersion": "v1", "metadata": {"annotations": { "service.beta.kubernetes.io/aws-load-balancer-type: nlb-ip" } } }'
