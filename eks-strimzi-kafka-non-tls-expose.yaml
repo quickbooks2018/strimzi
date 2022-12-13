@@ -1,0 +1,149 @@
+# https://strimzi.io/docs/operators/latest/configuring.html
+# https://strimzi.io/docs/operators/in-development/full/deploying.html
+# https://www.tabnine.com/code/java/methods/com.linkedin.kafka.cruisecontrol.analyzer.GoalOptimizer/%3Cinit%3E
+# https://github.com/strimzi/strimzi-kafka-operator/blob/main/install/cluster-operator/060-Deployment-strimzi-cluster-operator.yaml
+# https://strimzi.io/blog/2019/05/13/accessing-kafka-part-4/
+# https://strimzi.io/quickstarts/
+# https://strimzi.io/blog/2018/07/30/running-kafka-on-dedicated-nodes/
+# https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html
+# https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/service/annotations/
+
+# Prerequisites
+# Kubernetes cluster
+
+# A running Cluster Operator
+
+# 1 git clone https://github.com/strimzi/strimzi-kafka-operator.git || kubectl create namespace kafka;kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
+
+# 2 do cd install/cluster-operator ---> https://github.com/strimzi/strimzi-kafka-operator/tree/main/install/cluster-operator
+
+# https://strimzi.io/docs/operators/latest/deploying.html#deploying-cluster-operator-str
+# Note: mentioned below kafka is the name of the namespace
+
+# 3 replace ---> sed -i 's/namespace: .*/namespace: kafka/' *RoleBinding*.yaml
+
+# kubectl -n kafka apply -f .
+
+# kubectl get kafka -n kafka ---> (must be in ready state)
+
+# A running Cluster Operator for this, CRDs are required, simply use below command for CRD + Installation of Strimzi Cluster Operaor
+
+###############################################################################################################
+# kubectl create namespace kafka;kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
+###############################################################################################################
+
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: cloudgeeks-eks-dev
+  namespace: kafka
+spec:
+  kafka:
+    template:
+      externalBootstrapService:
+        
+   
+      pod:
+        # Affinity Strategies
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: strimzi.io/cluster
+                      operator: In 
+                      values:
+                        - cloudgeeks-eks-dev
+                topologyKey: "kubernetes.io/hostname"
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: eks.amazonaws.com/nodegroup
+                    operator: In 
+                    values:
+                    - cloudgeeks-eks-workers
+            
+
+    replicas: 2
+    version: 3.3.1
+    logging:
+      type: inline
+      loggers:
+        kafka.root.logger.level: "INFO"
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: false
+      - name: external
+        port: 9094
+        type: loadbalancer
+        tls: false
+
+     
+    rack:
+      topologyKey: topology.kubernetes.io/zone
+    storage:
+      type: jbod
+      volumes:
+      - id: 0
+        type: persistent-claim
+        size: 10Gi
+        deleteClaim: false
+    config:
+      offsets.topic.replication.factor: 2
+      transaction.state.log.replication.factor: 2
+      transaction.state.log.min.isr: 2
+
+  zookeeper:
+    template:
+      pod:
+        # Affinity Strategies
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: strimzi.io/cluster
+                      operator: In 
+                      values:
+                        - cloudgeeks-eks-dev
+                topologyKey: "kubernetes.io/hostname"
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                  - key: eks.amazonaws.com/nodegroup
+                    operator: In 
+                    values:
+                    - cloudgeeks-eks-workers
+
+    replicas: 2
+    storage:
+      type: persistent-claim
+      size: 10Gi
+      deleteClaim: false
+    resources:
+      requests:
+        cpu: 1
+        memory: 2Gi
+      limits:
+        cpu: 2
+        memory: 4Gi
+    logging:
+      type: inline 
+      loggers:
+        zookeeper.root.logger: "INFO"
+    
+  # Strimzi Operators    
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+  
+  
