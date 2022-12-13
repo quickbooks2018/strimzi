@@ -25,9 +25,11 @@
 
 
 # A running Cluster Operator for this, CRDs are required, simply use below command for CRD + Installation of Strimzi Cluster Operaor
+
+###############################################################################################################
 # kubectl create namespace kafka;kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
-# kubectl -n kafka expose service/cloudgeeks-gke-kafka-bootstrap --name kafka-bootstrap --type LoadBalancer --port 9091 --target-port 9092
-                                                                                                             # serive-port          # container-port   
+###############################################################################################################
+
 ---
 apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
@@ -73,7 +75,7 @@ spec:
                     - cloudgeeks-eks-workers
             
 
-    replicas: 2
+    replicas: 3
     version: 3.3.1
     logging:
       type: inline
@@ -136,7 +138,7 @@ spec:
                     values:
                     - cloudgeeks-eks-workers
 
-    replicas: 1
+    replicas: 3
     storage:
       type: persistent-claim
       size: 10Gi
