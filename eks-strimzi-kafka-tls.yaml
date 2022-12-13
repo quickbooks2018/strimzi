@@ -5,7 +5,8 @@
 # https://strimzi.io/blog/2019/05/13/accessing-kafka-part-4/
 # https://strimzi.io/quickstarts/
 # https://strimzi.io/blog/2018/07/30/running-kafka-on-dedicated-nodes/
-
+# https://medium.com/@Opportunity-of-Learning/installation-of-strimzi-kafka-with-ssl-on-kubernetes-7b7228d6d217
+# https://www.systemcraftsman.com/2020/09/23/tls-authentication-on-strimzi-by-using-strimzi-kafka-cli/
 
 # Prerequisites
 # Kubernetes cluster
@@ -85,6 +86,16 @@ spec:
       loggers:
         kafka.root.logger.level: "INFO"
     listeners:
+  #    - name: external
+  #      port: 9094
+  #      type: loadbalancer 
+  #      tls: false
+  #    - name: external
+  #      port: 9094
+  #      type: loadbalancer 
+   #     tls: true   
+   #       authentication:
+   #         type: scram-sha-512
       - name: external
         port: 9094
         type: loadbalancer 
