@@ -147,7 +147,7 @@ spec:
         cpu: 1
         memory: 1Gi
       limits:
-        cpu: 1
+        cpu: 2
         memory: 2Gi
     logging:
       type: inline 
