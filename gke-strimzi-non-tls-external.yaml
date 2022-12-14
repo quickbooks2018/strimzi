@@ -132,16 +132,13 @@ spec:
     userOperator: {}
   cruiseControl:
     brokerCapacity:
-      disk: 1Gi 
-      cpuUtilization: 80
       inboundNetwork: 1000KB/s
       outboundNetwork: 1000KB/s
     config:
       hard:goals: >
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.RackAwareGoal,
         com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuCapacityGoal
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal
     resources:
       requests:
         cpu: 1
