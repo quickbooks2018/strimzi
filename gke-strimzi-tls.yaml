@@ -7,6 +7,7 @@
 # https://strimzi.io/blog/2018/07/30/running-kafka-on-dedicated-nodes/
 # https://medium.com/@Opportunity-of-Learning/installation-of-strimzi-kafka-with-ssl-on-kubernetes-7b7228d6d217
 # https://www.systemcraftsman.com/2020/09/23/tls-authentication-on-strimzi-by-using-strimzi-kafka-cli/
+# https://strimzi.io/docs/operators/in-development/full/configuring.html#cruise-control-concepts-str
 
 
 # Prerequisites
@@ -133,16 +134,12 @@ spec:
     userOperator: {}
   cruiseControl:
     brokerCapacity:
-      disk: 1Gi 
-      cpuUtilization: 80
       inboundNetwork: 1000KB/s
       outboundNetwork: 1000KB/s
     config:
       hard:goals: >
         com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuCapacityGoal
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal
     resources:
       requests:
         cpu: 1
