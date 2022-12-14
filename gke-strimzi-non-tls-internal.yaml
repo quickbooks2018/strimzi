@@ -68,6 +68,13 @@ spec:
 
     replicas: 2
     version: 3.3.1
+    # resources:
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2Gi
+    #   limits:
+    #     cpu: 1
+    #     memory: 2Gi
     logging:
       type: inline
       loggers:
@@ -140,13 +147,13 @@ spec:
         com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundCapacityGoal,
         com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal
     
-    resources:
-      requests:
-        cpu: 0.5
-        memory: 1Gi
-      limits:
-        cpu: 1
-        memory: 2Gi
+    # resources:
+    #   requests:
+    #     cpu: 500m
+    #     memory: 2Gi
+    #   limits:
+    #     cpu: 1
+    #     memory: 2Gi
     logging:
       type: inline 
       loggers:
