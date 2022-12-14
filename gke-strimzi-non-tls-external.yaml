@@ -59,12 +59,12 @@ spec:
               - labelSelector:
                   matchExpressions:
                     - key: strimzi.io/cluster
-                      operator: In
+                      operator: In 
                       values:
                         - cloudgeeks-gke
                 topologyKey: "kubernetes.io/hostname"
-
-
+          
+            
 
     replicas: 2
     version: 3.3.1
@@ -73,20 +73,24 @@ spec:
       loggers:
         kafka.root.logger.level: "INFO"
     listeners:
+
       - name: plain
         port: 9092
         type: internal
         tls: false
+
+      - name: external
+        port: 9094
+        type: loadbalancer 
+        tls: false
+    
       - name: tls
         port: 9093
         type: internal
         tls: true
-      - name: external
-        port: 9094
-        type: loadbalancer
-        tls: false
 
 
+     
     rack:
       topologyKey: topology.kubernetes.io/zone
     storage:
@@ -111,30 +115,53 @@ spec:
               - labelSelector:
                   matchExpressions:
                     - key: strimzi.io/cluster
-                      operator: In
+                      operator: In 
                       values:
                         - cloudgeeks-gke
                 topologyKey: "kubernetes.io/hostname"
+          
 
-
-    replicas: 2
+    replicas: 1
     storage:
       type: persistent-claim
       size: 10Gi
       deleteClaim: false
-    resources:
-      requests:
-        cpu: 1
-        memory: 2Gi
-      limits:
-        cpu: 2
-        memory: 4Gi
-    logging:
-      type: inline
-      loggers:
-        zookeeper.root.logger: "INFO"
-
-  # Strimzi Operators
+  # Strimzi Operators    
   entityOperator:
     topicOperator: {}
     userOperator: {}
+  cruiseControl:
+    brokerCapacity:
+      disk: 1Gi 
+      cpuUtilization: 80
+      inboundNetwork: 1000KB/s
+      outboundNetwork: 1000KB/s
+    config:
+      hard:goals: >
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuCapacityGoal
+    resources:
+      requests:
+        cpu: 1
+        memory: 1Gi
+      limits:
+        cpu: 1
+        memory: 2Gi
+    logging:
+      type: inline 
+      loggers:
+        zookeeper.root.logger: "INFO"
+    template:
+      pod:
+        securityContext:
+          runAsUser: 1000001
+          fsGroup: 0
+        terminationGracePeriodSeconds: 120
+    readinessProbe:
+      initialDelaySeconds: 150
+      timeoutSeconds: 10
+    livenessProbe:
+      initialDelaySeconds: 150
+      timeoutSeconds: 10
