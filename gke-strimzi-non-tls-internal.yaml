@@ -136,6 +136,7 @@ spec:
       outboundNetwork: 1000KB/s
     config:
       hard:goals: >
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.RackAwareGoal,
         com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundCapacityGoal,
         com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal
     
