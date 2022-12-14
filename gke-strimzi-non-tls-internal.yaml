@@ -45,12 +45,12 @@ spec:
         metadata:
           annotations:
             # Internally exposed
-            cloud.google.com/load-balancer-type: "External"
+            cloud.google.com/load-balancer-type: "Internal"
       perPodService:
         metadata:
           annotations:
             # Internally exposed
-            cloud.google.com/load-balancer-type: "External"
+            cloud.google.com/load-balancer-type: "Internal"
       pod:
         # Affinity Strategies
         affinity:
