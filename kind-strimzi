@@ -1,8 +1,14 @@
 https://strimzi.io/quickstarts/
 
+############
+# Kind Setup
+#############
 kubectl create namespace kafka
 kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
 kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-persistent-single.yaml -n kafka 
+
+
+
 
 # this is https://strimzi.io/examples/latest/kafka/kafka-persistent-single.yaml
 apiVersion: kafka.strimzi.io/v1beta2
